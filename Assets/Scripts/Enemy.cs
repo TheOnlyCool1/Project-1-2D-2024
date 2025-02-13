@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,49 +36,77 @@ public class Enemy : MonoBehaviour
 
     private void Update() {
         /* TODO 2.1: Call Move() if player is !null */
-
+        if (player != null)
+        {
+            Move();
+        }
     }
     #endregion
 
     #region Movement_functions
     private void Move()
-    { 
+    {
         /* TODO 2.1: Move the enemy towards the player */
-
+        EnemyRB.linearVelocity = (player.transform.position - transform.position).normalized * moveSpeed;
     }
     #endregion
 
     #region Attack_functions
     private void Explode()
     {
-        /* TODO 2.2: Explode should Debug.Log("Tons of Damage") if the player is within explosionRadius. 
+		/* TODO 2.2: Explode should Debug.Log("Tons of Damage") if the player is within explosionRadius. 
             To simulate a explosion, the enemy game object should be destroyed and spawn the explosionObj prefab in its place. 
             NOTE: You will NOT be implementing the damage in this task, print out damage using Debug.Log() in place of where the damage function would be called.
             We will implement the damage in task 3.2.
             IMPORTANT: Destroy() should be the LAST function executed. Once a game object is destroyed, it will not execute any code beyond that line. 
         */
 
-
-
-        /* TODO 3.2: Call the TakeDamage() function inside of the player's PlayerController script using
+		/* TODO 3.2: Call the TakeDamage() function inside of the player's PlayerController script using
             the "hit" reference variable. */
+        
+		Instantiate(explosionObject).transform.position = transform.position;
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(EnemyRB.position, explosionRadius, Vector2.zero);
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (hit.transform.CompareTag("Player"))
+            {
+				Debug.Log("Tons of Damage");
+                hit.collider.GetComponent<PlayerController>().TakeDamage(explosionDamage);
+                break;
+			}
+        }
 
+		FindFirstObjectByType<AudioManager>().Play("Explosion");
+
+		Destroy(gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-       /* TODO 2.2: Call Explode() if enemy comes in contact with player */
-
+        /* TODO 2.2: Call Explode() if enemy comes in contact with player */
+        if (other.transform.CompareTag("Player"))
+        {
+            Explode();
+        }
     }
     #endregion
 
     #region Health_functions
     public void TakeDamage(float value)
     {
-       /* TODO 3.1: Adjust currHealth when the enemy takes damage
-        IMPORTANT: What happens when the enemy's health reaches 0? */
-    }
+         /* TODO 3.1: Adjust currHealth when the enemy takes damage
+          IMPORTANT: What happens when the enemy's health reaches 0? */
+        
+        currHealth -= value;
+        if (currHealth < 0)
+        {
+            Die();
+        }
 
-    private void Die()
+		FindFirstObjectByType<AudioManager>().Play("EnemyHurt");
+
+	}
+
+	private void Die()
     {
         Destroy(this.gameObject);
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -24,21 +25,25 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         /* TODO 7.2: Change the scene when this function is called to the appropriate scene using SceneManager.LoadScene() */
+        SceneManager.LoadScene("SampleScene");
     }
 
     public void LoseGame()
     {
         /* TODO 7.2: Change the scene when this function is called to the appropriate scene using SceneManager.LoadScene() */
-    }
+        SceneManager.LoadScene("LoseScreen");
+	}
 
-    public void WinGame()
+	public void WinGame()
     {
         /* TODO 7.2: Change the scene when this function is called to the appropriate scene using SceneManager.LoadScene() */
-    }
+        SceneManager.LoadScene("WinScreen");
+	}
 
-    public void MainMenu()
+	public void MainMenu()
     {
         /* TODO 7.2: Change the scene when this function is called to the appropriate scene using SceneManager.LoadScene() */
-    }
-    #endregion
+        SceneManager.LoadScene("MainMenu");
+	}
+	#endregion
 }

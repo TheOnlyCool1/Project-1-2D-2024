@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     #region Health_variables
     public float maxHealth = 5;
     float currHealth = 5;
+    public Slider HPSlider;
     #endregion
 
     #region Animation_components
@@ -27,22 +29,54 @@ public class PlayerController : MonoBehaviour
     private void Awake() {
         /* TODO: Update your Awake function to initialize all variables needed. This includes your attackTimer, and your HPSlider.value.*/
 
-        /* TODO 4.1: Set HPSlider.value to a ratio between the 
+        attackTimer = 0;
+        currHealth = maxHealth;
+		UpdateHPBar();
+
+		/* TODO 4.1: Set HPSlider.value to a ratio between the 
             player's current health and maximum health. */
-            
-        PlayerRB = GetComponent<Rigidbody2D>();
+
+		PlayerRB = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
     private void Update() {
+
+        if (isAttacking)
+        {
+            return;
+        }
+
         /*TODO 1.1: Write an Update function that will call the Move() helper function while also updating the x_input and y_input values.
         You will also need to edit this function when you call attacks, and interacting with chests.*/
 
-        /* TODO 1.2: Check if the attack key is being pressed. If so, attack by calling your Attack() function
+        x_input = Input.GetAxisRaw("Horizontal");
+        y_input = Input.GetAxisRaw("Vertical");
+
+        Move();
+
+		/* TODO 1.2: Check if the attack key is being pressed. If so, attack by calling your Attack() function
          * IMPORTANT:  You will need to use `Input.GetKeyDown(KeyCode key)` to determine if the key is being pressed
         */
 
-        /* TODO 1.3: Modify your attack conditional statement to only attack when attackTimer < 0. Otherwise, decrement the attackTimer. */
-    }
+		/* TODO 1.3: Modify your attack conditional statement to only attack when attackTimer < 0. Otherwise, decrement the attackTimer. */
+
+		if (attackTimer <= 0)
+		{
+			if (Input.GetKeyDown(KeyCode.J))
+			{
+				Attack();
+			}
+		}
+		else
+		{
+			attackTimer -= Time.deltaTime;
+		}
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Interact();
+        }
+	}
     #endregion
 
 
@@ -61,14 +95,17 @@ public class PlayerController : MonoBehaviour
     private void Attack()
     {
         // TODO 1.3: Set the attackTimer to attackSpeed to reset the attack cooldown 
+        attackTimer = attackSpeed;
+        StartCoroutine(AttackRoutine());
+		FindFirstObjectByType<AudioManager>().Play("PlayerAttack");
         Debug.Log("Attacking now");
-    }
+	}
 
     IEnumerator AttackRoutine()
     {
         /* Note: You will need to edit this function in the animation section, the enemy section, and in the sound section.*/
         isAttacking = true;
-        PlayerRB.velocity = Vector2.zero;
+        PlayerRB.linearVelocity = Vector2.zero;
         anim.SetTrigger("Attack");
         yield return new WaitForSeconds(hitboxTiming);
         Debug.Log("Casting hitbox now");
@@ -81,6 +118,7 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Tons of Damage");
                 /* TODO 3.2: Call TakeDamage() inside of the enemy's Enemy script using
                 the "hit" reference variable */
+                hit.transform.GetComponent<Enemy>().TakeDamage(damage);
             }
         }
 
@@ -95,8 +133,27 @@ public class PlayerController : MonoBehaviour
     {
         /*TODO 1.1: Edit the Move() function which will set PlayerRB.velocity to a vector based on which input the player is pressing.*/
 
+        PlayerRB.linearVelocity = new Vector2(x_input, y_input) * moveSpeed;
+
         /* TODO 1.4: Set currDirection to the correct Vector direction i.e. Vector2.left.
          * HINT: there are four cardinal directions. */
+
+        if (y_input > 0)
+        {
+            currDirection = Vector2.up;
+        }
+        else if (y_input < 0)
+        {
+            currDirection = Vector2.down;
+        }
+        else if (x_input > 0)
+        {
+            currDirection = Vector2.right;
+        }
+        else if (x_input < 0)
+        {
+            currDirection = Vector2.left;
+        }
 
 
         /* DO NOT MODIFY ANYTHING BELOW THIS LINE UNLESS YOU REALLY KNOW WHAT YOU'RE DOING */
@@ -124,20 +181,40 @@ public class PlayerController : MonoBehaviour
         /* TODO 3.1: Adjust currHealth when the player takes damage
         IMPORTANT: What happens when the player's health reaches 0? */
 
-        /* TODO 4.1: Update the value of HPSlider after the player's health changes. */
-    }
+        currHealth -= value;
+        Debug.Log(currHealth);
+        UpdateHPBar();
+        if (currHealth < 0)
+		{
+            Die();
+        }
+		FindFirstObjectByType<AudioManager>().Play("PlayerHurt");
 
-    public void Heal(float value)
+		/* TODO 4.1: Update the value of HPSlider after the player's health changes. */
+	}
+
+	public void Heal(float value)
     {
         /* TODO 3.1: Adjust currHealth when the player heals
         IMPORTANT: What happens when the player's health surpasses their max health? Should currHealth be above maxHealth?*/
+
+        currHealth += value;
+        currHealth = Mathf.Min(currHealth, maxHealth);
+        UpdateHPBar();
 
         /* TODO 4.1: Update the value of HPSlider after the player's health changes. */
     }
 
     public void Die()
     {
-        Destroy(this.gameObject);
+		FindFirstObjectByType<AudioManager>().Play("PlayerDeath");
+        GameManager.Instance.LoseGame();
+        Destroy(gameObject);
+	}
+
+    private void UpdateHPBar()
+    {
+        HPSlider.value = currHealth/maxHealth;
     }
     #endregion
 
@@ -146,6 +223,14 @@ public class PlayerController : MonoBehaviour
     {
         /* TODO 6.3: Use a BoxCastAll raycast to check what is infront of the player. 
          * If there is a chest game object, open the chest by calling it's Open() function */
+
+        foreach (RaycastHit2D hit in Physics2D.BoxCastAll(transform.position, Vector2.one * 0.5f, 0, currDirection))
+        {
+            if (hit.transform.CompareTag("Chest"))
+            {
+                hit.transform.GetComponent<Chest>().Open();
+            }
+        }
 
     }
     #endregion
