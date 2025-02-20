@@ -26,6 +26,7 @@ public class AudioManager : MonoBehaviour
             if (sound.name == "Music")
             {
                 sound.source.outputAudioMixerGroup = musicGroup;
+                sound.source.volume = 0.1f;
                 sound.source.loop = true;
                 sound.source.playOnAwake = true;
             }

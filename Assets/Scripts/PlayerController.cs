@@ -119,8 +119,9 @@ public class PlayerController : MonoBehaviour
                 /* TODO 3.2: Call TakeDamage() inside of the enemy's Enemy script using
                 the "hit" reference variable */
                 hit.transform.GetComponent<Enemy>().TakeDamage(damage);
-            }
-        }
+				FindFirstObjectByType<AudioManager>().Play("SwordHit");
+			}
+		}
 
         yield return new WaitForSeconds(hitboxTiming);
         isAttacking = false;

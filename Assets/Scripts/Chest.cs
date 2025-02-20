@@ -22,6 +22,7 @@ public class Chest : MonoBehaviour
     public void Open()
     {
         StartCoroutine("DestroyChest");
-    }
-    #endregion
+		FindFirstObjectByType<AudioManager>().Play("ChestOpen");
+	}
+	#endregion
 }

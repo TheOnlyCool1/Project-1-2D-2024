@@ -374,12 +374,8 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1053284202722258, guid: 7435eaae065048643bcec5496115f0f9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4818893945292060, guid: 7435eaae065048643bcec5496115f0f9, type: 3}
-      propertyPath: m_RootOrder
-      value: 2
+      propertyPath: m_Name
+      value: AudioManager
       objectReference: {fileID: 0}
     - target: {fileID: 4818893945292060, guid: 7435eaae065048643bcec5496115f0f9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -409,66 +405,17 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 114709323922030040, guid: 7435eaae065048643bcec5496115f0f9,
-        type: 3}
-      propertyPath: sfxGroup
-      value: 
-      objectReference: {fileID: 243729444503017978, guid: 71b02338fcece8343abcdfeb304f819f,
-        type: 2}
-    - target: {fileID: 114709323922030040, guid: 7435eaae065048643bcec5496115f0f9,
-        type: 3}
-      propertyPath: sounds.Array.size
-      value: 6
+    - target: {fileID: 4818893945292060, guid: 7435eaae065048643bcec5496115f0f9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114709323922030040, guid: 7435eaae065048643bcec5496115f0f9,
-        type: 3}
-      propertyPath: sounds.Array.data[3].name
-      value: EnemyHurt
+    - target: {fileID: 4818893945292060, guid: 7435eaae065048643bcec5496115f0f9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114709323922030040, guid: 7435eaae065048643bcec5496115f0f9,
-        type: 3}
-      propertyPath: sounds.Array.data[4].name
-      value: PlayerAttack
-      objectReference: {fileID: 0}
-    - target: {fileID: 114709323922030040, guid: 7435eaae065048643bcec5496115f0f9,
-        type: 3}
-      propertyPath: sounds.Array.data[5].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 1d3e3e11bb0c4484b8b1eaf77d622a69, type: 3}
-    - target: {fileID: 114709323922030040, guid: 7435eaae065048643bcec5496115f0f9,
-        type: 3}
-      propertyPath: sounds.Array.data[5].name
-      value: Potion
-      objectReference: {fileID: 0}
-    - target: {fileID: 114709323922030040, guid: 7435eaae065048643bcec5496115f0f9,
-        type: 3}
-      propertyPath: sounds.Array.data[0].group
-      value: Foley
-      objectReference: {fileID: 0}
-    - target: {fileID: 114709323922030040, guid: 7435eaae065048643bcec5496115f0f9,
-        type: 3}
-      propertyPath: sounds.Array.data[1].group
-      value: Foley
-      objectReference: {fileID: 0}
-    - target: {fileID: 114709323922030040, guid: 7435eaae065048643bcec5496115f0f9,
-        type: 3}
-      propertyPath: sounds.Array.data[2].group
-      value: SFX
-      objectReference: {fileID: 0}
-    - target: {fileID: 114709323922030040, guid: 7435eaae065048643bcec5496115f0f9,
-        type: 3}
-      propertyPath: sounds.Array.data[3].group
-      value: SFX
-      objectReference: {fileID: 0}
-    - target: {fileID: 114709323922030040, guid: 7435eaae065048643bcec5496115f0f9,
-        type: 3}
-      propertyPath: sounds.Array.data[4].group
-      value: Foley
-      objectReference: {fileID: 0}
-    - target: {fileID: 114709323922030040, guid: 7435eaae065048643bcec5496115f0f9,
-        type: 3}
-      propertyPath: sounds.Array.data[5].group
-      value: SFX
+    - target: {fileID: 4818893945292060, guid: 7435eaae065048643bcec5496115f0f9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
